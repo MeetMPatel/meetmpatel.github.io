@@ -10,6 +10,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 <style>
 /* Layout: fixed identity column on the left, a single reading column on the right; stacks on phones. */
 :root {
@@ -53,6 +63,20 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
   display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 64px;
 }
 
+/* Theme toggle */
+.theme-toggle {
+  position: fixed; z-index: 10;
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  right: max(14px, env(safe-area-inset-right, 0px));
+  width: 38px; height: 38px; display: grid; place-items: center; padding: 0;
+  background: var(--bg); color: var(--muted); border: 1px solid var(--rule); border-radius: 50%; cursor: pointer;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--muted); }
+.theme-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.theme-toggle .i-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+
 /* Identity column */
 .id { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 40px); align-self: start; display: grid; gap: 22px; }
 .mono {
@@ -92,16 +116,27 @@ p { margin: 0; max-width: 66ch; }
 .news li { display: grid; grid-template-columns: 88px minmax(0,1fr); gap: 16px; }
 .date { font-family: var(--f-mono); font-size: 13px; color: var(--muted); padding-top: 2px; font-variant-numeric: tabular-nums; }
 
-/* Research */
-.themes { display: grid; gap: 28px; }
-.theme { display: grid; gap: 8px; }
-.theme .tag {
+/* Projects tabs */
+.tablist { display: none; }
+.tabs-on .tablist { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--rule); margin-bottom: 20px; scrollbar-width: thin; }
+.tab {
+  font: 500 14.5px/1.2 var(--f-body); color: var(--muted); background: none; border: 0;
+  border-bottom: 2px solid transparent; padding: 10px 14px; margin-bottom: -1px; cursor: pointer; white-space: nowrap;
+}
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.panel { display: grid; gap: 10px; }
+.panel[hidden] { display: none; }
+.panel .tag {
   justify-self: start; font: 500 11.5px/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase;
   color: var(--accent); background: var(--accent-soft); padding: 5px 8px; border-radius: 3px;
 }
-.theme .tag.past { color: var(--muted); background: var(--surface); }
+.panel .tag.past { color: var(--muted); background: var(--surface); }
+#project-tabs:not(.tabs-on) .panel + .panel { margin-top: 28px; }
 .param { font-family: var(--f-mono); font-size: 13.5px; color: var(--muted); }
 .param i { font-family: var(--f-display); font-style: italic; font-size: 15px; }
+.proj-links { font-size: 14.5px; color: var(--muted); }
+.proj-video { width: 100%; max-width: 720px; border-radius: 6px; background: var(--surface); margin-top: 6px; }
 
 /* Publications */
 .pub-group { display: grid; gap: 14px; }
@@ -141,10 +176,14 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule)
 </style>
 </head>
 <body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" title="Toggle light/dark theme">
+  <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+  <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+</button>
 
 <div class="wrap">
   <aside class="id">
-    <img class="mono" src="image.png" alt="Meet Patel" style="object-fit:cover; object-position:center 0%">
+    <img class="mono" src="image.png" alt="Meet M Patel" style="object-fit:cover; object-position:center 0%">
     <div>
       <h1>Meet Patel</h1>
       <p class="role"><strong>Postdoctoral Fellow</strong><br>Mechanical &amp; Aerospace Engineering<br>Princeton University</p>
@@ -182,30 +221,56 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule)
       </ul>
     </section>
 
-    <section id="research" aria-labelledby="h-research">
-      <h2 id="h-research">Research</h2>
-      <div class="themes">
-        <div class="theme">
+    <section id="projects" aria-labelledby="h-projects">
+      <h2 id="h-projects">Projects</h2>
+      <div id="project-tabs">
+        <div class="tablist" role="tablist" aria-label="Research projects">
+          <button class="tab" role="tab" id="tab-aerosols" aria-controls="panel-aerosols" aria-selected="true" type="button">Atmospheric aerosols</button>
+          <button class="tab" role="tab" id="tab-jets" aria-controls="panel-jets" aria-selected="false" tabindex="-1" type="button">Underexpanded jets</button>
+          <button class="tab" role="tab" id="tab-plume" aria-controls="panel-plume" aria-selected="false" tabindex="-1" type="button">Plume&ndash;surface interaction</button>
+          <button class="tab" role="tab" id="tab-rom" aria-controls="panel-rom" aria-selected="false" tabindex="-1" type="button">Reduced-order models</button>
+        </div>
+
+        <div class="panel" role="tabpanel" id="panel-aerosols" aria-labelledby="tab-aerosols">
           <span class="tag">Current</span>
           <h3>Atmospheric aerosols</h3>
           <p>At Princeton I am developing computational models for aerosol particles in the atmosphere, building on methods for particle-laden turbulence to understand how aerosols are transported and evolve.</p>
+          <p class="proj-links">Group: <a href="https://ctrfl.princeton.edu/">CTRFL, Princeton</a></p>
+          <!-- Video slot: uncomment and edit when ready
+          <video class="proj-video" controls preload="metadata" poster="videos/aerosols.jpg"><source src="videos/aerosols.mp4" type="video/mp4"></video>
+          -->
         </div>
-        <div class="theme">
+
+        <div class="panel" role="tabpanel" id="panel-jets" aria-labelledby="tab-jets">
           <span class="tag past">Ph.D.</span>
           <h3>Particles in underexpanded jets</h3>
           <p>Using ultra-high-speed schlieren, Lagrangian particle tracking, and three-dimensional simulations, we showed that particles shift the Mach disk of an underexpanded jet upstream even at low mass loading, and built a semi-analytic Fanno-flow model that predicts the size of the shift.</p>
-          <p class="param">Mach disk shift scales with mass loading, nozzle pressure ratio <i>η</i><sub>0</sub> and slip velocity, and inversely with particle diameter</p>
+          <p class="param">Mach disk shift scales with mass loading, nozzle pressure ratio <i>&eta;</i><sub>0</sub> and slip velocity, and inversely with particle diameter</p>
+          <p class="proj-links">Papers: <a href="https://doi.org/10.1017/jfm.2024.1014">J. Fluid Mech. 2024</a> &middot; <a href="https://www.iccfd.org/iccfd11/assets/pdf/papers/ICCFD11_Paper-1002.pdf">ICCFD11 2022</a></p>
+          <!-- Video slot: uncomment and edit when ready
+          <video class="proj-video" controls preload="metadata" poster="videos/jets.jpg"><source src="videos/jets.mp4" type="video/mp4"></video>
+          -->
         </div>
-        <div class="theme">
+
+        <div class="panel" role="tabpanel" id="panel-plume" aria-labelledby="tab-plume" hidden>
           <span class="tag past">Ph.D.</span>
-          <h3>Plume–surface interaction</h3>
-          <p>When a lander fires its engines near the ground, the exhaust erodes regolith and launches high-speed ejecta. I simulated plume-driven erosion of granular beds under Martian conditions, helped explain the stable streak patterns seen from Apollo to Chang'e as a Görtler instability in the jet shear layer, and developed data-driven models of crater growth.</p>
-          <p class="param">Martian regolith: <i>ρ</i><sub>p</sub>/<i>ρ</i> = 𝒪(10<sup>5</sup>), strong two-way coupling</p>
+          <h3>Plume&ndash;surface interaction</h3>
+          <p>When a lander fires its engines near the ground, the exhaust erodes regolith and launches high-speed ejecta. I simulated plume-driven erosion of granular beds under Martian conditions, helped explain the stable streak patterns seen from Apollo to Chang&rsquo;e as a G&ouml;rtler instability in the jet shear layer, and developed data-driven models of crater growth.</p>
+          <p class="param">Martian regolith: <i>&rho;</i><sub>p</sub>/<i>&rho;</i> = &#119978;(10<sup>5</sup>), strong two-way coupling</p>
+          <p class="proj-links">Papers: <a href="https://doi.org/10.1038/s41467-025-62001-8">Nat. Commun. 2025</a> &middot; <a href="https://doi.org/10.2514/6.2026-2153">AIAA 2026</a> &middot; <a href="https://doi.org/10.2514/6.2025-2568">AIAA 2025</a> &middot; <a href="https://doi.org/10.2514/6.2022-2193">AIAA 2022</a></p>
+          <!-- Video slot: uncomment and edit when ready
+          <video class="proj-video" controls preload="metadata" poster="videos/plume.jpg"><source src="videos/plume.mp4" type="video/mp4"></video>
+          -->
         </div>
-        <div class="theme">
+
+        <div class="panel" role="tabpanel" id="panel-rom" aria-labelledby="tab-rom" hidden>
           <span class="tag past">Methods</span>
-          <h3>Numerical methods for compressible gas–particle flows</h3>
-          <p>High-order, low-dissipation Euler–Lagrange schemes, and two-way coupling strategies that stay stable when particles cross shocks.</p>
+          <h3>Reduced-order models</h3>
+          <p>Full simulations of gas&ndash;particle flows are expensive, so I built compact models that keep the dominant physics. Examples include a one-dimensional Fanno-flow model that predicts how particles move the Mach disk, and a sparse-regression with gene expression that reduces crater evolution during plume&ndash;surface interaction to a simple functional form connecting the state variables to the crater dimensions.</p>
+          <p class="proj-links">Papers: <a href="https://doi.org/10.1017/jfm.2024.1014">J. Fluid Mech. 2024</a> &middot; <a href="https://doi.org/10.2514/6.2025-2568">AIAA 2025</a> &middot; <a href="https://doi.org/10.2514/6.2026-2153">AIAA 2026</a></p>
+          <!-- Video slot: uncomment and edit when ready
+          <video class="proj-video" controls preload="metadata" poster="videos/rom.jpg"><source src="videos/rom.mp4" type="video/mp4"></video>
+          -->
         </div>
       </div>
     </section>
@@ -325,6 +390,54 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule)
     } catch (e) { selectIt(); }
     setTimeout(function () { btn.textContent = 'Copy'; }, 1800);
   });
+})();
+
+(function () {
+  var root = document.getElementById('project-tabs');
+  if (!root) return;
+  var tabs = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+  var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+  root.classList.add('tabs-on');
+  function select(i, focus) {
+    tabs.forEach(function (t, j) {
+      var on = i === j;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      panels[j].hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+    try { history.replaceState(null, '', '#' + tabs[i].id.replace('tab-', '')); } catch (e) {}
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i, false); });
+    t.addEventListener('keydown', function (e) {
+      var n = tabs.length, k = e.key;
+      if (k === 'ArrowRight') { e.preventDefault(); select((i + 1) % n, true); }
+      else if (k === 'ArrowLeft') { e.preventDefault(); select((i - 1 + n) % n, true); }
+      else if (k === 'Home') { e.preventDefault(); select(0, true); }
+      else if (k === 'End') { e.preventDefault(); select(n - 1, true); }
+    });
+  });
+  var h = (location.hash || '').replace('#', '');
+  var start = tabs.findIndex(function (t) { return t.id === 'tab-' + h; });
+  select(start >= 0 ? start : 0, false);
+  if (start < 0) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
+})();
+
+(function () {
+  var btn = document.getElementById('theme-toggle');
+  var root = document.documentElement;
+  function sync() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+  }
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    sync();
+  });
+  sync();
 })();
 </script>
 <script data-goatcounter="https://meetmpatel.goatcounter.com/count"
