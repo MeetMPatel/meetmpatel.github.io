@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meet Patel</title>
+<meta name="description" content="Meet Patel, postdoctoral researcher at Princeton University working on multiphase and particle-laden flows.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: fixed identity column on the left, a single reading column on the right; stacks on phones. */
+:root {
+  --bg: #fbfcfd;
+  --surface: #f1f4f7;
+  --ink: #18212b;
+  --muted: #5a6673;
+  --rule: #dde3e9;
+  --accent: #1f5f8b;
+  --accent-soft: #e3eef6;
+  --f-display: "Literata", Georgia, "Times New Roman", serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11161c; --surface: #18202a; --ink: #e4e9ee; --muted: #94a1ae;
+    --rule: #263140; --accent: #7db7e0; --accent-soft: #1b2c3b; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11161c; --surface: #18202a; --ink: #e4e9ee; --muted: #94a1ae;
+  --rule: #263140; --accent: #7db7e0; --accent-soft: #1b2c3b; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; text-underline-offset: 3px; }
+a:hover { text-decoration: underline; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+.wrap {
+  max-width: 1080px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 56px 72px;
+  display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 64px;
+}
+
+/* Identity column */
+.id { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 40px); align-self: start; display: grid; gap: 22px; }
+.mono {
+  width: 112px; aspect-ratio: 1; max-width: 100%; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent);
+  display: grid; place-items: center;
+  font-family: var(--f-display); font-size: 40px; font-weight: 500; letter-spacing: .02em;
+}
+.id h1 { font-family: var(--f-display); font-weight: 500; font-size: 32px; line-height: 1.15; margin: 0; }
+.role { margin: 6px 0 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
+.role strong { color: var(--ink); font-weight: 500; }
+.links { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 15px; }
+.links li { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.links svg { width: 16px; height: 16px; flex: none; stroke: var(--muted); fill: none; stroke-width: 1.6; }
+.email-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.email { font-family: var(--f-mono); font-size: 13.5px; user-select: all; overflow-wrap: anywhere; }
+.copy {
+  font: 500 12px/1 var(--f-body); color: var(--muted); background: transparent;
+  border: 1px solid var(--rule); border-radius: 4px; padding: 4px 7px; cursor: pointer;
+}
+.copy:hover { color: var(--ink); border-color: var(--muted); }
+.addr { font-size: 13.5px; color: var(--muted); line-height: 1.5; margin: 0; }
+
+/* Reading column */
+main { min-width: 0; display: grid; gap: 56px; }
+section { display: grid; gap: 18px; }
+h2 {
+  font-family: var(--f-body); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin: 0; padding-bottom: 10px; border-bottom: 1px solid var(--rule);
+}
+h3 { font-family: var(--f-display); font-weight: 500; font-size: 20px; line-height: 1.3; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 66ch; }
+.lede { font-family: var(--f-display); font-size: 19px; line-height: 1.6; max-width: 62ch; }
+
+/* News */
+.news { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.news li { display: grid; grid-template-columns: 88px minmax(0,1fr); gap: 16px; }
+.date { font-family: var(--f-mono); font-size: 13px; color: var(--muted); padding-top: 2px; font-variant-numeric: tabular-nums; }
+
+/* Research */
+.themes { display: grid; gap: 28px; }
+.theme { display: grid; gap: 8px; }
+.theme .tag {
+  justify-self: start; font: 500 11.5px/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--accent); background: var(--accent-soft); padding: 5px 8px; border-radius: 3px;
+}
+.theme .tag.past { color: var(--muted); background: var(--surface); }
+.param { font-family: var(--f-mono); font-size: 13.5px; color: var(--muted); }
+.param i { font-family: var(--f-display); font-style: italic; font-size: 15px; }
+
+/* Publications */
+.pub-group { display: grid; gap: 14px; }
+.pub-group h3 { font-size: 15px; color: var(--muted); font-family: var(--f-body); font-weight: 500; }
+ol.pubs { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.pubs li { display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 12px; }
+.pubs li > div { min-width: 0; }
+.yr { font-family: var(--f-mono); font-size: 13px; color: var(--muted); padding-top: 3px; font-variant-numeric: tabular-nums; }
+.pt { font-family: var(--f-display); font-size: 17px; line-height: 1.4; font-weight: 500; display: block; text-wrap: pretty; }
+.pa { font-size: 14.5px; color: var(--muted); display: block; margin-top: 3px; }
+.pa b { color: var(--ink); font-weight: 600; }
+.pv { font-size: 14.5px; display: block; margin-top: 2px; }
+.plinks { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; font: 500 12.5px/1.4 var(--f-mono); }
+.note { font-size: 14px; color: var(--muted); }
+
+/* CV-style rows */
+.rows { display: grid; gap: 16px; }
+.row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 2px 20px; }
+.row .what { font-weight: 500; }
+.row .where { color: var(--muted); font-size: 15px; grid-column: 1; }
+.row .when { font-family: var(--f-mono); font-size: 13px; color: var(--muted); grid-row: 1; grid-column: 2; font-variant-numeric: tabular-nums; padding-top: 2px; }
+
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 18px; }
+
+@media (max-width: 820px) {
+  .wrap { grid-template-columns: minmax(0,1fr); gap: 40px; padding-block: 32px 56px; }
+  .id { position: static; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: 16px 20px; }
+  .mono { width: 80px; font-size: 28px; }
+  .id h1 { font-size: 28px; }
+  .links, .addr { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+  .news li, .pubs li { grid-template-columns: minmax(0,1fr); gap: 2px; }
+  .row { grid-template-columns: minmax(0,1fr); }
+  .row .when { grid-row: auto; grid-column: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <aside class="id">
+    <div class="mono" aria-hidden="true">MP</div>
+    <div>
+      <h1>Meet Patel</h1>
+      <p class="role"><strong>Postdoctoral Researcher</strong><br>Mechanical &amp; Aerospace Engineering<br>Princeton University</p>
+    </div>
+    <ul class="links">
+      <li>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        <span class="email-row"><span class="email" id="email">mp8873@princeton.edu</span><button class="copy" id="copy-email" type="button">Copy</button></span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3L2 9l10 6 10-6-10-6z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/></svg>
+        <a href="https://scholar.google.com/citations?user=1IjWzIEAAAAJ&amp;hl=en">Google Scholar</a>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 0 0 1.3 2h11.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7.5 15h9"/></svg>
+        <a href="https://ctrfl.princeton.edu/">CTRFL, Princeton</a>
+      </li>
+    </ul>
+    <p class="addr">Engineering Quadrangle<br>Princeton, NJ 08544</p>
+  </aside>
+
+  <main>
+    <section id="about" aria-labelledby="h-about">
+      <h2 id="h-about">About</h2>
+      <p class="lede">I study how small particles and droplets move through, and push back on, the flows around them.</p>
+      <p>I am a postdoctoral researcher in the <a href="https://ctrfl.princeton.edu/">Computational Turbulent Reacting Flow Laboratory</a> at Princeton, working with Prof. Michael E. Mueller on atmospheric aerosols. I received my Ph.D. from the University of Michigan, where I worked with Prof. Jesse Capecelatro on high-speed gas–particle flows. My work combines high-order compressible flow solvers, Euler–Lagrange particle tracking, and close collaboration with experimentalists, with applications ranging from rocket plumes landing on the Moon and Mars to particles in the atmosphere.</p>
+    </section>
+
+    <section id="news" aria-labelledby="h-news">
+      <h2 id="h-news">News</h2>
+      <ul class="news">
+        <li><span class="date">2026</span><span>Joined the <a href="https://ctrfl.princeton.edu/people/">CTRFL group</a> at Princeton as a postdoctoral researcher.</span></li>
+        <li><span class="date">Jul 2025</span><span>Our paper explaining the radial dust streaks seen in lunar landings was published in <em>Nature Communications</em> and covered by <a href="https://news.engin.umich.edu/2025/07/solving-a-moon-mystery-helps-game-out-future-landings/">Michigan Engineering</a> and <a href="https://hub.jhu.edu/2025/07/21/lunar-landing-dust-debris">Johns Hopkins</a>.</span></li>
+        <li><span class="date">Nov 2024</span><span>Paper on inertial particles in underexpanded jets published in the <em>Journal of Fluid Mechanics</em>.</span></li>
+      </ul>
+    </section>
+
+    <section id="research" aria-labelledby="h-research">
+      <h2 id="h-research">Research</h2>
+      <div class="themes">
+        <div class="theme">
+          <span class="tag">Current</span>
+          <h3>Atmospheric aerosols</h3>
+          <p>At Princeton I am developing computational models for aerosol particles in the atmosphere, building on methods for particle-laden turbulence to understand how aerosols are transported and evolve.</p>
+        </div>
+        <div class="theme">
+          <span class="tag past">Ph.D.</span>
+          <h3>Particles in underexpanded jets</h3>
+          <p>Using ultra-high-speed schlieren, Lagrangian particle tracking, and three-dimensional simulations, we showed that particles shift the Mach disk of an underexpanded jet upstream even at low mass loading, and built a semi-analytic Fanno-flow model that predicts the size of the shift.</p>
+          <p class="param">Mach disk shift scales with mass loading, nozzle pressure ratio <i>η</i><sub>0</sub> and slip velocity, and inversely with particle diameter</p>
+        </div>
+        <div class="theme">
+          <span class="tag past">Ph.D.</span>
+          <h3>Plume–surface interaction</h3>
+          <p>When a lander fires its engines near the ground, the exhaust erodes regolith and launches high-speed ejecta. I simulated plume-driven erosion of granular beds under Martian conditions, helped explain the stable streak patterns seen from Apollo to Chang'e as a Görtler instability in the jet shear layer, and developed data-driven models of crater growth.</p>
+          <p class="param">Martian regolith: <i>ρ</i><sub>p</sub>/<i>ρ</i> = 𝒪(10<sup>5</sup>), strong two-way coupling</p>
+        </div>
+        <div class="theme">
+          <span class="tag past">Methods</span>
+          <h3>Numerical methods for compressible gas–particle flows</h3>
+          <p>High-order, low-dissipation Euler–Lagrange schemes, and two-way coupling strategies that stay stable when particles cross shocks.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="publications" aria-labelledby="h-pubs">
+      <h2 id="h-pubs">Publications</h2>
+      <div class="pub-group">
+        <h3>Journal articles</h3>
+        <ol class="pubs">
+          <li>
+            <span class="yr">2025</span>
+            <div>
+              <span class="pt">Dusty streaks on the Moon: fingerprints of multiphase flow instabilities</span>
+              <span class="pa">J. S. Rubio, N. S. Rodrigues, Y. Qi, <b>M. Patel</b>, M. T. Gorman, M. X. Diaz-Lopez, J. Capecelatro, P. M. Danehy, R. Ni</span>
+              <span class="pv"><em>Nature Communications</em> 16, 6670</span>
+              <span class="plinks"><a href="https://doi.org/10.1038/s41467-025-62001-8">DOI</a><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12276295">Open access</a></span>
+            </div>
+          </li>
+          <li>
+            <span class="yr">2024</span>
+            <div>
+              <span class="pt">Experimental and numerical investigation of inertial particles in underexpanded jets</span>
+              <span class="pa"><b>M. Patel</b>, J. S. Rubio, D. Shekhtman, N. Parziale, J. Rabinovitch, R. Ni, J. Capecelatro</span>
+              <span class="pv"><em>Journal of Fluid Mechanics</em> 1000, A60</span>
+              <span class="plinks"><a href="https://doi.org/10.1017/jfm.2024.1014">DOI</a></span>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <div class="pub-group">
+        <h3>Conference papers</h3>
+        <ol class="pubs">
+          <li>
+            <span class="yr">2026</span>
+            <div>
+              <span class="pt">Data-driven framework to characterize crater dynamics during plume–surface interactions</span>
+              <span class="pa"><b>M. Patel</b>, L. Bruni, N. Nanjappa, F. Evrard, J. Capecelatro, L. Villafañe Roca</span>
+              <span class="pv">AIAA SciTech Forum, Orlando, FL</span>
+              <span class="plinks"><a href="https://doi.org/10.2514/6.2026-2153">DOI</a></span>
+            </div>
+          </li>
+          <li>
+            <span class="yr">2025</span>
+            <div>
+              <span class="pt">Two-way coupling in particle-laden compressible jets</span>
+              <span class="pa"><b>M. Patel</b>, J. Capecelatro</span>
+              <span class="pv">International Conference on Multiphase Flow (ICMF 2025)</span>
+              <span class="plinks"><a href="https://www.conftool.net/icmf2025/index.php/Patel-Two-way_Coupling_in_Particle-laden_Compressible_jets-1010.pdf?page=downloadPaper&amp;filename=Patel-Two-way_Coupling_in_Particle-laden_Compressible_jets-1010.pdf&amp;form_id=1010">PDF</a></span>
+            </div>
+          </li>
+          <li>
+            <span class="yr">2025</span>
+            <div>
+              <span class="pt">Data-driven characterization of crater morphology during plume–surface interaction</span>
+              <span class="pa">L. Bruni, <b>M. Patel</b>, F. Evrard, J. Capecelatro, L. Villafañe Roca</span>
+              <span class="pv">AIAA SciTech Forum, Orlando, FL</span>
+              <span class="plinks"><a href="https://doi.org/10.2514/6.2025-2568">DOI</a></span>
+            </div>
+          </li>
+          <li>
+            <span class="yr">2022</span>
+            <div>
+              <span class="pt">A high-order low-dissipation Euler–Lagrange method for compressible gas–particle flows</span>
+              <span class="pa"><b>M. Patel</b>, J. Capecelatro</span>
+              <span class="pv">11th International Conference on Computational Fluid Dynamics (ICCFD11), Maui, HI</span>
+              <span class="plinks"><a href="https://www.iccfd.org/iccfd11/assets/pdf/papers/ICCFD11_Paper-1002.pdf">PDF</a></span>
+            </div>
+          </li>
+          <li>
+            <span class="yr">2022</span>
+            <div>
+              <span class="pt">Eulerian–Lagrangian simulations of plume-induced sheared granular beds under Martian conditions</span>
+              <span class="pa"><b>M. Patel</b>, J. Rabinovitch, J. Capecelatro</span>
+              <span class="pv">AIAA SciTech Forum, San Diego, CA</span>
+              <span class="plinks"><a href="https://doi.org/10.2514/6.2022-2193">DOI</a></span>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <p class="note">For a complete and current list, see <a href="https://scholar.google.com/citations?user=1IjWzIEAAAAJ&amp;hl=en">Google Scholar</a>.</p>
+    </section>
+
+    <section id="talks" aria-labelledby="h-talks">
+      <h2 id="h-talks">Selected talks</h2>
+      <div class="rows">
+        <div class="row"><span class="what">Two-way coupling in particle-laden compressible jets</span><span class="where">International Conference on Multiphase Flow</span><span class="when">2025</span></div>
+        <div class="row"><span class="what">Particle-laden underexpanded jets: a numerical study</span><span class="where">APS Division of Fluid Dynamics, Indianapolis, IN</span><span class="when">2022</span></div>
+        <div class="row"><span class="what">Numerical simulation of particle-laden underexpanded jets</span><span class="where">APS Division of Fluid Dynamics (virtual)</span><span class="when">2020</span></div>
+      </div>
+    </section>
+
+    <section id="experience" aria-labelledby="h-exp">
+      <h2 id="h-exp">Positions &amp; education</h2>
+      <div class="rows">
+        <div class="row"><span class="what">Postdoctoral Researcher, Mechanical &amp; Aerospace Engineering</span><span class="where">Princeton University · Advisor: Michael E. Mueller</span><span class="when">2026–</span></div>
+        <div class="row"><span class="what">Ph.D.</span><span class="where">University of Michigan, Ann Arbor · Advisor: Jesse Capecelatro</span><span class="when"></span></div>
+      </div>
+    </section>
+
+    <footer>Last updated October 2026</footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  var btn = document.getElementById('copy-email');
+  var el = document.getElementById('email');
+  btn.addEventListener('click', function () {
+    var text = el.textContent;
+    function selectIt() {
+      var r = document.createRange(); r.selectNodeContents(el);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Selected';
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () { btn.textContent = 'Copied'; }, selectIt);
+    } catch (e) { selectIt(); }
+    setTimeout(function () { btn.textContent = 'Copy'; }, 1800);
+  });
+})();
+</script>
+</body>
+</html>
