@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="26" fill="#1f5f8b"/>
+  <!-- nozzle -->
+  <path d="M6 36 L28 50 V78 L6 92 Z" fill="#cfe3f1"/>
+  <!-- shock diamonds -->
+  <g fill="none" stroke="#fff" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M30 64 L54 40 L78 64 L54 88 Z" stroke-width="8"/>
+  </g>
+  <path d="M78 52 V76" stroke="#ff8a1f" stroke-width="12" stroke-linecap="round"/>
+  <!-- particles -->
+  <circle cx="30" cy="26" r="7" fill="#ff8a1f"/>
+  <circle cx="72" cy="104" r="7" fill="#9fd0f0"/>
+  <circle cx="104" cy="34" r="6" fill="#9fd0f0"/>
+  <circle cx="108" cy="90" r="8" fill="#ff8a1f"/>
+  <circle cx="98" cy="64" r="6" fill="#cfe3f1"/>
+</svg>
