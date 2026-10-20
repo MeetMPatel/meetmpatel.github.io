@@ -144,7 +144,6 @@ p { margin: 0; max-width: 66ch; }
 .sv-stage { position: relative; display: grid; gap: 34px; }
 .sv-video { position: relative; width: 100%; aspect-ratio: 2699 / 1016; background: #b9bcc1; border-radius: 6px; overflow: hidden; }
 .sv-video video { display: block; width: 100%; height: 100%; object-fit: cover; }
-.sv-label { position: absolute; left: 1.2%; top: 3%; font: italic 500 clamp(12px, 2.2vw, 20px)/1.2 var(--f-body); color: #111; pointer-events: none; }
 .sv-box { position: absolute; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.35); pointer-events: none; }
 .sv-plots {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;
@@ -313,7 +312,6 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule)
             <div class="sv-stage">
               <div class="sv-video">
                 <video id="vid-stats" controlsList="nodownload" disablePictureInPicture oncontextmenu="return false;" muted loop playsinline controls preload="metadata" poster="Videos/jet_stats.jpg"><source src="Videos/jet_stats.mp4" type="video/mp4"></video>
-                <span class="sv-label" id="sv-label">At 0 &lt; <i>x</i>/<i>D</i><sub>e</sub> &lt; 1</span>
                 <div class="sv-box" id="sv-box"></div>
               </div>
               <div class="sv-plots" id="sv-plots">
@@ -894,15 +892,14 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule)
   var videoWrap = root.querySelector('.sv-video');
   var vid = document.getElementById('vid-stats');
   var box = document.getElementById('sv-box');
-  var label = document.getElementById('sv-label');
   var plots = document.getElementById('sv-plots');
   var svg = document.getElementById('sv-lines');
   var btns = Array.prototype.slice.call(root.querySelectorAll('.sv-btn'));
 
   // Box positions as % of the video frame (taken from the original slides)
   var REGIONS = {
-    r1: { left: 1.31, top: 34.02, w: 10.43, h: 43.75, text: 'At 0 &lt; <i>x</i>/<i>D</i><sub>e</sub> &lt; 1' },
-    r2: { left: 33.0, top: 34.02, w: 10.35, h: 43.75, text: 'At 3 &lt; <i>x</i>/<i>D</i><sub>e</sub> &lt; 4' }
+    r1: { left: 1.31, top: 34.02, w: 10.43, h: 43.75 },
+    r2: { left: 33.0, top: 34.02, w: 10.35, h: 43.75 }
   };
   var current = 'r1';
 
@@ -924,7 +921,6 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule)
     var r = REGIONS[key];
     box.style.left = r.left + '%'; box.style.top = r.top + '%';
     box.style.width = r.w + '%'; box.style.height = r.h + '%';
-    label.innerHTML = r.text;
     btns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-r') === key ? 'true' : 'false'); });
     Array.prototype.forEach.call(plots.children, function (f) { f.hidden = f.getAttribute('data-r') !== key; });
     drawLines();
