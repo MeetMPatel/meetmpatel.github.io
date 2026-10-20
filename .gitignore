@@ -1,0 +1,6 @@
+# large or temporary files that should not be published
+ppt_videos.pptx
+Videos/ppt_videos.pptx
+Videos/*.avi
+_preview_jets.html
+.DS_Store

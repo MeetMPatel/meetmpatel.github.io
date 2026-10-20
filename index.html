@@ -131,6 +131,32 @@ p { margin: 0; max-width: 66ch; }
   border-radius: 8px; background: var(--surface);
 }
 
+/* Velocity statistics viewer */
+.stat-viz { margin: 4px 0 0; display: grid; gap: 12px; }
+.sv-title { font-family: var(--f-display); font-size: 17px; font-weight: 500; margin: 0; max-width: none; }
+.sv-toolbar { display: flex; gap: 8px; flex-wrap: wrap; }
+.sv-btn {
+  font: 500 14px/1 var(--f-body); color: var(--muted); background: var(--bg);
+  border: 1px solid var(--rule); border-radius: 999px; padding: 8px 14px; cursor: pointer;
+}
+.sv-btn:hover { color: var(--ink); border-color: var(--muted); }
+.sv-btn[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.sv-stage { position: relative; display: grid; gap: 34px; }
+.sv-video { position: relative; width: 100%; aspect-ratio: 2699 / 1016; background: #b9bcc1; border-radius: 6px; overflow: hidden; }
+.sv-video video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sv-label { position: absolute; left: 1.2%; top: 3%; font: italic 500 clamp(12px, 2.2vw, 20px)/1.2 var(--f-body); color: #111; pointer-events: none; }
+.sv-box { position: absolute; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.35); pointer-events: none; }
+.sv-plots {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;
+  padding: 10px; border: 1.5px solid var(--accent); border-radius: 4px; background: var(--bg);
+}
+.sv-plots figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+.sv-plots figure[hidden] { display: none; }
+.sv-plots img { display: block; width: 100%; height: auto; aspect-ratio: 2.2; object-fit: contain; background: #000; border-radius: 4px; }
+.sv-plots figcaption { font-family: var(--f-mono); font-size: 13px; color: var(--muted); text-align: center; }
+.sv-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+@media (max-width: 560px) { .sv-plots { grid-template-columns: minmax(0, 1fr); } }
+
 /* Projects tabs */
 .tablist { display: none; }
 .tabs-on .tablist { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--rule); margin-bottom: 20px; scrollbar-width: thin; }
@@ -152,6 +178,17 @@ p { margin: 0; max-width: 66ch; }
 .param i { font-family: var(--f-display); font-style: italic; font-size: 15px; }
 .proj-links { font-size: 14.5px; color: var(--muted); }
 .proj-video { width: 100%; max-width: 720px; border-radius: 6px; background: var(--surface); margin-top: 6px; }
+/* two videos side by side, stacked on narrow screens */
+.video-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 6px; }
+.video-row .proj-video { max-width: none; height: auto; margin-top: 0; aspect-ratio: 1228 / 664; object-fit: contain; }
+.video-row figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+.vwrap { position: relative; }
+.vwrap .proj-video { display: block; width: 100%; }
+.vwrap-gortler { max-width: 720px; margin-top: 6px; }
+.vwrap-gortler .proj-video { height: auto; aspect-ratio: 2856 / 1608; object-fit: contain; margin-top: 0; }
+.vann { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.video-row figcaption { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+@media (max-width: 560px) { .video-row { grid-template-columns: minmax(0, 1fr); } }
 
 /* Publications */
 .pub-group { display: grid; gap: 14px; }
@@ -256,7 +293,7 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule)
           <figcaption class="note">Schematic. Particles stick on contact and build fractal aggregates, like soot or dust clumps. *Effects are exaggerated for clarity.</figcaption>
           </figure>
           <!-- Video slot: uncomment and edit when ready
-          <video class="proj-video" controls preload="metadata" poster="videos/aerosols.jpg"><source src="videos/aerosols.mp4" type="video/mp4"></video>
+          <video controlsList="nodownload" disablePictureInPicture oncontextmenu="return false;" class="proj-video" controls preload="metadata" poster="videos/aerosols.jpg"><source src="videos/aerosols.mp4" type="video/mp4"></video>
           -->
         </div>
 
@@ -265,23 +302,84 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule)
           <h3>Particles in underexpanded jets</h3>
           <p>Using ultra-high-speed schlieren, Lagrangian particle tracking, and three-dimensional simulations, we showed that particles shift the Mach disk of an underexpanded jet upstream even at low mass loading, and built a semi-analytic Fanno-flow model that predicts the size of the shift.</p>
           <p class="param">Mach disk shift scales with mass loading, nozzle pressure ratio <i>&eta;</i><sub>0</sub> and slip velocity, and inversely with particle diameter</p>
-          <p class="proj-links">Papers: <a href="https://doi.org/10.1017/jfm.2024.1014">J. Fluid Mech. 2024</a> &middot; <a href="https://www.iccfd.org/iccfd11/assets/pdf/papers/ICCFD11_Paper-1002.pdf">ICCFD11 2022</a></p>
+          <p class="proj-links">Papers: <a href="https://doi.org/10.1017/jfm.2024.1014">J. Fluid Mech. 2024</a> &middot; <a href="https://www.iccfd.org/iccfd11/assets/pdf/papers/ICCFD11_Paper-1002.pdf">ICCFD11 2022</a> &middot;<a href="https://doi.org/10.1038/s41467-025-62001-8">Nat. Commun. 2025</a></p>
 
-          <!-- Video slot: uncomment and edit when ready
-          <video class="proj-video" controls preload="metadata" poster="videos/jets.jpg"><source src="videos/jets.mp4" type="video/mp4"></video>
-          -->
+          <figure class="stat-viz" id="stat-viz">
+            <p class="sv-title">Particle velocity statistics: comparisons with experiments</p>
+            <div class="sv-toolbar" role="group" aria-label="Region along the jet">
+              <button type="button" class="sv-btn" data-r="r1" aria-pressed="true">0 &lt; <i>x</i>/<i>D</i><sub>e</sub> &lt; 1</button>
+              <button type="button" class="sv-btn" data-r="r2" aria-pressed="false">3 &lt; <i>x</i>/<i>D</i><sub>e</sub> &lt; 4</button>
+            </div>
+            <div class="sv-stage">
+              <div class="sv-video">
+                <video id="vid-stats" controlsList="nodownload" disablePictureInPicture oncontextmenu="return false;" muted loop playsinline controls preload="metadata" poster="Videos/jet_stats.jpg"><source src="Videos/jet_stats.mp4" type="video/mp4"></video>
+                <span class="sv-label" id="sv-label">At 0 &lt; <i>x</i>/<i>D</i><sub>e</sub> &lt; 1</span>
+                <div class="sv-box" id="sv-box"></div>
+              </div>
+              <div class="sv-plots" id="sv-plots">
+                <figure data-r="r1"><img src="Images/hist_r1_dp42.png" alt="Particle velocity histogram for 42 micron particles at 0 < x/De < 1" loading="lazy"><figcaption><i>d</i><sub>p</sub> = 42 &micro;m; mass loading = 0.21</figcaption></figure>
+                <figure data-r="r1"><img src="Images/hist_r1_dp98.png" alt="Particle velocity histogram for 98 micron particles at 0 < x/De < 1" loading="lazy"><figcaption><i>d</i><sub>p</sub> = 98 &micro;m; mass loading = 0.88</figcaption></figure>
+                <figure data-r="r2" hidden><img src="Images/hist_r2_dp42.png" alt="Particle velocity histogram for 42 micron particles at 3 < x/De < 4" loading="lazy"><figcaption><i>d</i><sub>p</sub> = 42 &micro;m; mass loading = 0.21</figcaption></figure>
+                <figure data-r="r2" hidden><img src="Images/hist_r2_dp98.png" alt="Particle velocity histogram for 98 micron particles at 3 < x/De < 4" loading="lazy"><figcaption><i>d</i><sub>p</sub> = 98 &micro;m; mass loading = 0.88</figcaption></figure>
+              </div>
+              <svg class="sv-lines" id="sv-lines" aria-hidden="true"></svg>
+            </div>
+          </figure>
+
+          <!--Video slot: uncomment and edit when ready -->
+          <p class="sv-title">G&ouml;rtler vortices in highly underexpanded jets</p>
+          <div class="vwrap vwrap-gortler">
+            <video id="vid-gortler" controlsList="nodownload" disablePictureInPicture oncontextmenu="return false;" class="proj-video" controls preload="metadata" poster="Videos/Gortler_sim.png"><source src="Videos/Gortler_sim.mp4" type="video/mp4"></video>
+            <!-- Annotations. Coordinates are in video pixels (2856 x 1608). -->
+            <svg class="vann" viewBox="0 0 2856 1608" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <marker id="g-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                  <path d="M0 0L10 5L0 10z" fill="#ff8a1f"/>
+                </marker>
+              </defs>
+              <g id="gv-ann" font-family="IBM Plex Sans, system-ui, sans-serif" font-size="68" font-weight="500" fill="#fff" stroke="#0b1d2a" stroke-width="10" paint-order="stroke" stroke-linejoin="round">
+                <line id="gv-line" x1="0" y1="0" x2="0" y2="0" stroke="#ff8a1f" stroke-width="11" stroke-linecap="round" marker-end="url(#g-head)"/>
+                <text id="gv-text" x="0" y="0">G&ouml;rtler vortex</text>
+              </g>
+              <g id="gm-ann" font-family="IBM Plex Sans, system-ui, sans-serif" font-size="68" font-weight="500" fill="#fff" stroke="#0b1d2a" stroke-width="10" paint-order="stroke" stroke-linejoin="round">
+                <line id="gm-line" x1="0" y1="0" x2="0" y2="0" stroke="#ff8a1f" stroke-width="11" stroke-linecap="round" marker-end="url(#g-head)"/>
+                <text id="gm-text" x="0" y="0">Mach disk</text>
+              </g>
+            </svg>
+          </div>
+          
         </div>
 
         <div class="panel" role="tabpanel" id="panel-plume" aria-labelledby="tab-plume" hidden>
           <span class="tag past">Ph.D.</span>
           <h3>Plume&ndash;surface interaction</h3>
           <p>When a lander fires its engines near the ground, the exhaust erodes regolith and launches high-speed ejecta. I simulated plume-driven erosion of granular beds under Martian conditions, helped explain the stable streak patterns seen from Apollo to Chang&rsquo;e as a G&ouml;rtler instability in the jet shear layer, and developed data-driven models of crater growth.</p>
-          <p class="param">Martian regolith: <i>&rho;</i><sub>p</sub>/<i>&rho;</i> = &#119978;(10<sup>5</sup>), strong two-way coupling</p>
+          <p class="param">Strong two-way coupling</p>
           <p class="proj-links">Papers: <a href="https://doi.org/10.1038/s41467-025-62001-8">Nat. Commun. 2025</a> &middot; <a href="https://doi.org/10.2514/6.2026-2153">AIAA 2026</a> &middot; <a href="https://doi.org/10.2514/6.2025-2568">AIAA 2025</a> &middot; <a href="https://doi.org/10.2514/6.2022-2193">AIAA 2022</a></p>
 
-          <!-- Video slot: uncomment and edit when ready
-          <video class="proj-video" controls preload="metadata" poster="videos/plume.jpg"><source src="videos/plume.mp4" type="video/mp4"></video>
-          -->
+          <!-- Video slot: uncomment and edit when ready -->
+          <div class="video-row">
+            <figure>
+              <video controlsList="nodownload" disablePictureInPicture oncontextmenu="return false;" class="proj-video" controls preload="metadata" poster="Videos/60_psi_t_14_t_115_better.png"><source src="Videos/60_psi_t_14_t_115_better.mp4" type="video/mp4"></video>
+              <figcaption>Pressure ratio: 4.08</figcaption>
+            </figure>
+            <figure>
+              <div class="vwrap">
+                <video controlsList="nodownload" disablePictureInPicture oncontextmenu="return false;" id="vid-612" class="proj-video" controls preload="metadata" poster="Videos/90_psi_t_20_t94_better.png"><source src="Videos/90_psi_t_20_t94_better.mp4" type="video/mp4"></video>
+                <!-- Mach disk annotation. Coordinates are in video pixels (1228 x 664). -->
+                <svg class="vann" viewBox="0 0 1228 664" preserveAspectRatio="none" aria-hidden="true">
+                  <defs>
+                    <marker id="md-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                      <path d="M0 0L10 5L0 10z" fill="#ff8a1f"/>
+                    </marker>
+                  </defs>
+                  <line id="md-line" x1="0" y1="0" x2="0" y2="0" stroke="#ff8a1f" stroke-width="5" stroke-linecap="round" marker-end="url(#md-head)"/>
+                  <text id="md-text" x="0" y="0" fill="#fff" font-size="40" font-family="IBM Plex Sans, system-ui, sans-serif" text-anchor="end">Mach disk</text>
+                </svg>
+              </div>
+              <figcaption>Pressure ratio: 6.12</figcaption>
+            </figure>
+          </div>
         </div>
 
         <div class="panel" role="tabpanel" id="panel-rom" aria-labelledby="tab-rom" hidden>
@@ -290,7 +388,7 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule)
           <p>Full simulations of gas&ndash;particle flows are expensive, so I built compact models that keep the dominant physics. Examples include a one-dimensional Fanno-flow model that predicts how particles move the Mach disk, and a sparse-regression with gene expression that reduces crater evolution during plume&ndash;surface interaction to a simple functional form connecting the state variables to the crater dimensions.</p>
           <p class="proj-links">Papers: <a href="https://doi.org/10.1017/jfm.2024.1014">J. Fluid Mech. 2024</a> &middot; <a href="https://doi.org/10.2514/6.2025-2568">AIAA 2025</a> &middot; <a href="https://doi.org/10.2514/6.2026-2153">AIAA 2026</a></p>
           <!-- Video slot: uncomment and edit when ready
-          <video class="proj-video" controls preload="metadata" poster="videos/rom.jpg"><source src="videos/rom.mp4" type="video/mp4"></video>
+          <video controlsList="nodownload" disablePictureInPicture oncontextmenu="return false;" class="proj-video" controls preload="metadata" poster="videos/rom.jpg"><source src="videos/rom.mp4" type="video/mp4"></video>
           -->
         </div>
       </div>
@@ -741,6 +839,168 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule)
 
 
 
+
+(function () {
+  var vid = document.getElementById('vid-612');
+  var line = document.getElementById('md-line');
+  var label = document.getElementById('md-text');
+  if (!vid || !line || !label) return;
+
+  // Mach disk position over time: [seconds, x, y] in video pixels (1228 x 664).
+  // These come from tracking the top of the dark block under the bright jet core.
+  // The disk barely moves; edit any row to nudge the arrow by hand.
+  var KEYS = [
+    [0, 629, 268], [1, 629, 268], [2, 629, 268], [3, 629, 268], [4, 629, 269],
+    [5, 629, 269], [6, 629, 269], [7, 629, 269], [8, 629, 268], [9, 628, 268]
+  ];
+  // Arrow tail relative to the tip, and label offset (video pixels)
+  var TAIL = { dx: -150, dy: -62 };
+  var TIP_GAP = { dx: -26, dy: 6 };   // keeps the arrowhead just outside the disk
+
+  function at(t) {
+    if (t <= KEYS[0][0]) return KEYS[0];
+    for (var i = 0; i < KEYS.length - 1; i++) {
+      var a = KEYS[i], b = KEYS[i + 1];
+      if (t <= b[0]) {
+        var f = (t - a[0]) / (b[0] - a[0]);
+        return [t, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f];
+      }
+    }
+    return KEYS[KEYS.length - 1];
+  }
+
+  function update() {
+    var k = at(vid.currentTime || 0);
+    var tx = k[1] + TIP_GAP.dx, ty = k[2] + TIP_GAP.dy;
+    line.setAttribute('x2', tx); line.setAttribute('y2', ty);
+    line.setAttribute('x1', tx + TAIL.dx); line.setAttribute('y1', ty + TAIL.dy);
+    label.setAttribute('x', tx + TAIL.dx - 12); label.setAttribute('y', ty + TAIL.dy - 6);
+  }
+
+  var raf = 0;
+  function loop() { update(); raf = requestAnimationFrame(loop); }
+  vid.addEventListener('play', function () { cancelAnimationFrame(raf); loop(); });
+  vid.addEventListener('pause', function () { cancelAnimationFrame(raf); update(); });
+  vid.addEventListener('ended', function () { cancelAnimationFrame(raf); update(); });
+  vid.addEventListener('seeked', update);
+  vid.addEventListener('timeupdate', update);
+  update();
+})();
+
+(function () {
+  var root = document.getElementById('stat-viz');
+  if (!root) return;
+  var stage = root.querySelector('.sv-stage');
+  var videoWrap = root.querySelector('.sv-video');
+  var vid = document.getElementById('vid-stats');
+  var box = document.getElementById('sv-box');
+  var label = document.getElementById('sv-label');
+  var plots = document.getElementById('sv-plots');
+  var svg = document.getElementById('sv-lines');
+  var btns = Array.prototype.slice.call(root.querySelectorAll('.sv-btn'));
+
+  // Box positions as % of the video frame (taken from the original slides)
+  var REGIONS = {
+    r1: { left: 1.31, top: 34.02, w: 10.43, h: 43.75, text: 'At 0 &lt; <i>x</i>/<i>D</i><sub>e</sub> &lt; 1' },
+    r2: { left: 33.0, top: 34.02, w: 10.35, h: 43.75, text: 'At 3 &lt; <i>x</i>/<i>D</i><sub>e</sub> &lt; 4' }
+  };
+  var current = 'r1';
+
+  function drawLines() {
+    var s = stage.getBoundingClientRect();
+    if (!s.width) return;
+    var b = box.getBoundingClientRect(), p = plots.getBoundingClientRect();
+    var bl = b.left - s.left, br = b.right - s.left, bb = b.bottom - s.top;
+    var pl = p.left - s.left, pr = p.right - s.left, pt = p.top - s.top;
+    svg.setAttribute('viewBox', '0 0 ' + s.width + ' ' + s.height);
+    svg.innerHTML =
+      '<g stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3" fill="none">' +
+      '<line x1="' + bl + '" y1="' + bb + '" x2="' + pl + '" y2="' + pt + '"/>' +
+      '<line x1="' + br + '" y1="' + bb + '" x2="' + pr + '" y2="' + pt + '"/></g>';
+  }
+
+  function select(key) {
+    current = key;
+    var r = REGIONS[key];
+    box.style.left = r.left + '%'; box.style.top = r.top + '%';
+    box.style.width = r.w + '%'; box.style.height = r.h + '%';
+    label.innerHTML = r.text;
+    btns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-r') === key ? 'true' : 'false'); });
+    Array.prototype.forEach.call(plots.children, function (f) { f.hidden = f.getAttribute('data-r') !== key; });
+    drawLines();
+  }
+
+  btns.forEach(function (b) { b.addEventListener('click', function () { select(b.getAttribute('data-r')); }); });
+  window.addEventListener('resize', drawLines);
+  if ('ResizeObserver' in window) new ResizeObserver(drawLines).observe(stage);
+  Array.prototype.forEach.call(plots.querySelectorAll('img'), function (im) { im.addEventListener('load', drawLines); });
+
+  // play while visible, pause when scrolled away or the tab is closed
+  if ('IntersectionObserver' in window && vid) {
+    new IntersectionObserver(function (es) {
+      if (es[0].isIntersecting) { var p = vid.play(); if (p && p.catch) p.catch(function () {}); drawLines(); }
+      else vid.pause();
+    }).observe(videoWrap);
+  }
+  select(current);
+})();
+
+(function () {
+  var vid = document.getElementById('vid-gortler');
+  if (!vid) return;
+
+  // Tracked positions, [seconds, x, y] in video pixels (2856 x 1608), from template matching
+  // on the vortex and from the right edge of the purple dome on the jet axis.
+  // Edit any row to nudge an arrow by hand.
+  var VORTEX = [
+    [0, 1147, 425], [1, 1146, 408], [2, 1146, 404], [3, 1146, 406], [4, 1146, 404], [5, 1146, 403], [6, 1146, 403],
+    [7, 1146, 400], [8, 1146, 399], [9, 1146, 400], [10, 1146, 401], [11, 1146, 399], [12, 1146, 399], [13.4, 1142, 404]
+  ];
+  var MACH = [
+    [0, 1244, 800], [1, 1249, 800], [2, 1256, 800], [3, 1254, 800], [4, 1243, 800], [5, 1239, 800], [6, 1236, 800],
+    [7, 1240, 800], [8, 1243, 800], [9, 1247, 800], [10, 1248, 800], [11, 1249, 800], [12, 1252, 800], [13.4, 1252, 800]
+  ];
+  // arrow tip offset from the tracked point, and tail offset from the tip (video pixels)
+  var NOTES = [
+    { keys: VORTEX, line: 'gv-line', text: 'gv-text', tip: { dx: 48, dy: -42 }, tail: { dx: 280, dy: -190 } },
+    { keys: MACH,   line: 'gm-line', text: 'gm-text', tip: { dx: 26, dy: 0 },   tail: { dx: 290, dy: 130 } }
+  ].map(function (n) {
+    n.line = document.getElementById(n.line); n.text = document.getElementById(n.text); return n;
+  });
+
+  function at(keys, t) {
+    if (t <= keys[0][0]) return keys[0];
+    for (var i = 0; i < keys.length - 1; i++) {
+      var a = keys[i], b = keys[i + 1];
+      if (t <= b[0]) {
+        var f = (t - a[0]) / (b[0] - a[0]);
+        return [t, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f];
+      }
+    }
+    return keys[keys.length - 1];
+  }
+
+  function update() {
+    var t = vid.currentTime || 0;
+    NOTES.forEach(function (n) {
+      var k = at(n.keys, t);
+      var tx = k[1] + n.tip.dx, ty = k[2] + n.tip.dy;
+      var sx = tx + n.tail.dx, sy = ty + n.tail.dy;
+      n.line.setAttribute('x2', tx); n.line.setAttribute('y2', ty);
+      n.line.setAttribute('x1', sx); n.line.setAttribute('y1', sy);
+      n.text.setAttribute('x', sx + 18); n.text.setAttribute('y', sy + 8);
+    });
+  }
+
+  var raf = 0;
+  function loop() { update(); raf = requestAnimationFrame(loop); }
+  vid.addEventListener('play', function () { cancelAnimationFrame(raf); loop(); });
+  vid.addEventListener('pause', function () { cancelAnimationFrame(raf); update(); });
+  vid.addEventListener('ended', function () { cancelAnimationFrame(raf); update(); });
+  vid.addEventListener('seeked', update);
+  vid.addEventListener('timeupdate', update);
+  update();
+})();
 </script>
 <script data-goatcounter="https://meetmpatel.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
